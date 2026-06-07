@@ -6,6 +6,7 @@ use App\Http\Controllers\Paciente\PatientDoctorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ForoController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfessionalCredentialController;
 use App\Http\Controllers\Admin\CredentialApprovalController;
 use App\Http\Controllers\Doctor\DoctorPatientController;
@@ -36,9 +37,7 @@ Route::middleware(['auth', 'verified', 'professional_verified'])->group(function
         };
     })->name('dashboard');
 
-    Route::get('/dashboard/paciente', function () {
-        return view('dashboards.paciente');
-    })->name('dashboard.paciente');
+    Route::get('/dashboard/paciente', [DashboardController::class, 'paciente'])->name('dashboard.paciente');
 
     Route::get('/dashboard/psicologo', function () {
         return view('dashboards.psicologo');
@@ -88,6 +87,7 @@ Route::middleware(['auth', 'verified', 'professional_verified'])->group(function
         Route::get('/', [DiarioController::class, 'index'])->name('index');
         Route::get('/crear', [DiarioController::class, 'create'])->name('create');
         Route::post('/', [DiarioController::class, 'store'])->name('store');
+        Route::post('/ajax/guardar', [DiarioController::class, 'storeFromDashboard'])->name('storeFromDashboard');
         Route::get('/{diario}', [DiarioController::class, 'show'])->name('show');
     });
 

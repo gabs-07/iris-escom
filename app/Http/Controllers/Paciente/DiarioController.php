@@ -64,6 +64,7 @@ class DiarioController extends Controller
 
         $validated = $request->validate([
             'contenido' => ['required', 'string', 'max:5000'],
+            'emoji' => ['nullable', 'string', 'max:10'],
         ]);
 
         $today = Carbon::today()->toDateString();
@@ -84,6 +85,7 @@ class DiarioController extends Controller
             'user_id' => $user->id,
             'fecha' => $today,
             'contenido' => $validated['contenido'],
+            'emoji' => $validated['emoji'] ?? '😐',
         ]);
 
         return redirect()
@@ -98,6 +100,45 @@ class DiarioController extends Controller
         abort_unless($diario->user_id === Auth::id(), 403);
 
         return view('diarios.show', [
+            'diario' => $diario,
+        ]);
+    }
+
+    public function storeFromDashboard(Request $request)
+    {
+        $this->ensurePaciente();
+
+        $validated = $request->validate([
+            'contenido' => ['required', 'string', 'max:5000'],
+            'emoji' => ['nullable', 'string', 'max:10'],
+        ]);
+
+        $today = Carbon::today()->toDateString();
+        /** @var User $user */
+        $user = Auth::user();
+
+        $existingDiary = $user->diarios()
+            ->whereDate('fecha', $today)
+            ->first();
+
+        if ($existingDiary) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ya guardaste tu diario de hoy. Solo se permite un diario por día.',
+                'already_saved' => true,
+            ], 422);
+        }
+
+        $diario = Diario::create([
+            'user_id' => $user->id,
+            'fecha' => $today,
+            'contenido' => $validated['contenido'],
+            'emoji' => $validated['emoji'] ?? '😐',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Diario guardado correctamente.',
             'diario' => $diario,
         ]);
     }

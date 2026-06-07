@@ -14,6 +14,7 @@ class Diario extends Model
         'user_id',
         'fecha',
         'contenido',
+        'emoji',
     ];
 
     protected function casts(): array
