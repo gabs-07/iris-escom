@@ -23,8 +23,10 @@
             <select id="rol" name="rol" class="block mt-1 w-full">
                 <option value="">-- Selecciona un Rol --</option>
                 <option value="1" {{ old('rol') == '1' ? 'selected' : '' }}>Paciente</option>
-                <option value="2" {{ old('rol') == '2' ? 'selected' : '' }}>Psicologo</option>
+                <option value="2" {{ old('rol') == '2' ? 'selected' : '' }}>Psicólogo</option>
                 <option value="3" {{ old('rol') == '3' ? 'selected' : '' }}>Psiquiatra</option>
+                <option value="4" {{ old('rol') == '4' ? 'selected' : '' }}>Admin</option>
+
             </select>
 
             <x-input-error :messages="$errors->get('rol')" class="mt-2" />

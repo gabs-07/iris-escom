@@ -12,6 +12,27 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
+     * Display a specific user's profile.
+     */
+    public function showUser($userId): View
+    {
+        $user = \App\Models\User::findOrFail($userId);
+        return view('profile.user', [
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Display the user's profile.
+     */
+    public function show(Request $request): View
+    {
+        return view('profile.show', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
      * Display the user's profile form.
      */
     public function edit(Request $request): View

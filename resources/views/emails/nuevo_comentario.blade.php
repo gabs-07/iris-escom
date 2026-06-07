@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #10b981;
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        .content {
+            background-color: white;
+            padding: 20px;
+        }
+        .comment-box {
+            background-color: #f3f4f6;
+            padding: 15px;
+            border-left: 4px solid #10b981;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .user-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #10b981;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        .button:hover {
+            background-color: #059669;
+        }
+        .footer {
+            background-color: #f3f4f6;
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-radius: 0 0 8px 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>¡Nuevo comentario en tu publicación!</h2>
+        </div>
+        
+        <div class="content">
+            <p>¡Hola <strong>{{ $notifiable->name }}</strong>!</p>
+            
+            <p><strong>{{ $comentario->user->name }}</strong> ha comentado en tu publicación:</p>
+            
+            <div class="user-info">
+                <strong>Usuario:</strong> {{ $comentario->user->name }}<br>
+                <strong>Email:</strong> {{ $comentario->user->email }}
+            </div>
+            
+            <div class="comment-box">
+                <p><strong>Comentario:</strong></p>
+                <p>{{ $comentario->contenido }}</p>
+            </div>
+            
+            <p>
+                <a href="{{ url(route('foro.index')) }}" class="button">Ver publicación</a>
+            </p>
+            
+            <p>Gracias por participar en nuestra comunidad.</p>
+        </div>
+        
+        <div class="footer">
+            <p>© {{ date('Y') }} Iris FEPI. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</body>
+</html>

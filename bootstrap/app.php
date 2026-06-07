@@ -12,7 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'professional_verified' => \App\Http\Middleware\EnsureUserIsVerifiedProfessional::class,
+            'require_completed_credentials' => \App\Http\Middleware\RequireCompletedCredentials::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

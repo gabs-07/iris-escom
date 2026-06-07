@@ -28,7 +28,9 @@
                         {{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
                     </div>
                     <div>
-                        <p class="text-sm font-semibold text-white">{{ auth()->user()->name }}</p>
+                        <a href="{{ route('profile.user', auth()->user()->id) }}" class="text-sm font-semibold text-white hover:text-emerald-400 transition">
+                            {{ auth()->user()->name }}
+                        </a>
                         <p class="text-xs text-white/70">Escribe una nueva publicación</p>
                     </div>
                 </div>
@@ -58,9 +60,27 @@
                                 <div class="min-w-0 flex-1">
                                     <div class="flex flex-wrap items-center justify-between gap-3">
                                         <div>
-                                            <h3 class="text-base font-semibold text-white">{{ $publicacion->user->name }}</h3>
+                                            <a href="{{ route('profile.user', $publicacion->user->id) }}" class="text-base font-semibold text-white hover:text-emerald-400 transition">
+                                                {{ $publicacion->user->name }}
+                                            </a>
                                             <p class="text-xs text-white/60">{{ $publicacion->created_at->format('d/m/Y H:i') }}</p>
                                         </div>
+
+                                        @if ($publicacion->user_id === auth()->id() || auth()->user()->rol === 4)
+                                            <div class="flex flex-wrap gap-2">
+                                                <a href="{{ route('foro.publicaciones.edit', $publicacion) }}" class="rounded-full border border-gray-600 px-3 py-1 text-xs font-semibold text-white transition hover:bg-gray-700">
+                                                    Editar
+                                                </a>
+
+                                                <form method="POST" action="{{ route('foro.publicaciones.destroy', $publicacion) }}" onsubmit="return confirm('¿Eliminar esta publicación?');" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="rounded-full border border-red-500 px-3 py-1 text-xs font-semibold text-white transition hover:bg-red-600">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -81,11 +101,13 @@
                                             <div class="min-w-0 flex-1">
                                                 <div class="flex flex-wrap items-center justify-between gap-2">
                                                     <div>
-                                                        <p class="text-sm font-semibold text-white">{{ $comentario->user->name }}</p>
+                                                        <a href="{{ route('profile.user', $comentario->user->id) }}" class="text-sm font-semibold text-white hover:text-emerald-400 transition">
+                                                            {{ $comentario->user->name }}
+                                                        </a>
                                                         <p class="text-xs text-white/60">{{ $comentario->created_at->format('d/m/Y H:i') }}</p>
                                                     </div>
 
-                                                    @if ($comentario->user_id === auth()->id())
+                                                    @if ($comentario->user_id === auth()->id() || auth()->user()->rol === 4)
                                                         <div class="flex flex-wrap gap-2">
                                                             <a href="{{ route('foro.comentarios.edit', $comentario) }}" class="rounded-full border border-gray-600 px-3 py-1 text-xs font-semibold text-white transition hover:bg-gray-700">
                                                                 Editar

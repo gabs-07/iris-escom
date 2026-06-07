@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'rol'])]
+#[Fillable(['name', 'email', 'password', 'rol', 'is_verified_professional'])]
 #[Hidden(['password', 'remember_token'])]
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -61,5 +62,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function comentariosPublicaciones(): HasMany
     {
         return $this->hasMany(ComentarioPublicacion::class);
+    }
+
+    public function professionalCredential(): HasOne
+    {
+        return $this->hasOne(ProfessionalCredential::class);
     }
 }
