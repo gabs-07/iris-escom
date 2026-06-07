@@ -281,10 +281,140 @@
                 </div>
             @else
                 <!-- Dashboard Principal -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <h3 class="text-lg font-semibold mb-4">Bienvenido, {{ auth()->user()->name }}</h3>
-                        <p class="text-gray-600 dark:text-gray-400">Este es tu panel de psiquiatra.</p>
+                <div class="space-y-6">
+                    <!-- Mis Pacientes -->
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 text-gray-900 dark:text-gray-100">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    <h3 class="text-lg font-semibold">Mis Pacientes ({{ auth()->user()->patients()->count() }})</h3>
+                                </div>
+                            </div>
+
+                            @if(auth()->user()->patients()->exists())
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead class="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                                            <tr>
+                                                <th class="px-4 py-3 text-left font-medium">Paciente</th>
+                                                <th class="px-4 py-3 text-left font-medium">Email</th>
+                                                <th class="px-4 py-3 text-left font-medium">Vinculado desde</th>
+                                                <th class="px-4 py-3 text-center font-medium">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                            @foreach(auth()->user()->patients()->get() as $relation)
+                                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                                                    <td class="px-4 py-4">
+                                                        <div class="font-medium">{{ $relation->patient->name }}</div>
+                                                    </td>
+                                                    <td class="px-4 py-4 text-gray-600 dark:text-gray-400">
+                                                        {{ $relation->patient->email }}
+                                                    </td>
+                                                    <td class="px-4 py-4 text-gray-600 dark:text-gray-400">
+                                                        {{ $relation->accepted_at?->format('d/m/Y') ?? $relation->updated_at->format('d/m/Y') }}
+                                                    </td>
+                                                    <td class="px-4 py-4">
+                                                        <div class="flex items-center justify-center gap-2">
+                                                            <button class="inline-flex items-center px-3 py-1 rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 text-xs font-medium transition">
+                                                                Ver perfil
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @else
+                                <div class="text-center py-12">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                                    </svg>
+                                    <p class="mt-4 text-gray-500 dark:text-gray-400">No tienes pacientes vinculados aún.</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Solicitudes Pendientes -->
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 text-gray-900 dark:text-gray-100">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                    </svg>
+                                    <h3 class="text-lg font-semibold">Solicitudes Pendientes ({{ auth()->user()->pendingPatientRequests()->count() }})</h3>
+                                </div>
+                            </div>
+
+                            @if(auth()->user()->pendingPatientRequests()->exists())
+                                <div class="space-y-4">
+                                    @foreach(auth()->user()->pendingPatientRequests()->get() as $request)
+                                        <div class="border border-amber-200 dark:border-amber-900/30 rounded-lg p-4 bg-amber-50 dark:bg-amber-900/10">
+                                            <div class="flex items-start justify-between">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="flex-shrink-0">
+                                                            <div class="flex items-center justify-center h-10 w-10 rounded-full bg-amber-600 text-white">
+                                                                <span class="text-sm font-medium">{{ substr($request->patient->name, 0, 1) }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <p class="font-semibold text-gray-900 dark:text-white">{{ $request->patient->name }}</p>
+                                                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ $request->patient->email }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                                                        <span class="font-medium">Enviada:</span> {{ $request->requested_at->diffForHumans() }}
+                                                    </p>
+                                                </div>
+
+                                                <div class="flex items-center gap-2 ml-4">
+                                                    <form action="{{ route('doctor.solicitudes.accept', $request) }}" method="POST" class="inline">
+                                                        @csrf
+                                                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-green-600 hover:bg-green-700 text-white text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                            </svg>
+                                                            Aceptar
+                                                        </button>
+                                                    </form>
+                                                    <form action="{{ route('doctor.solicitudes.reject', $request) }}" method="POST" class="inline">
+                                                        @csrf
+                                                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                            </svg>
+                                                            Rechazar
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="text-center py-12">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                                    </svg>
+                                    <p class="mt-4 text-gray-500 dark:text-gray-400">No hay solicitudes pendientes.</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Información General -->
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 text-gray-900 dark:text-gray-100">
+                            <h3 class="text-lg font-semibold mb-4">Bienvenido, {{ auth()->user()->name }}</h3>
+                            <p class="text-gray-600 dark:text-gray-400">Este es tu panel de psiquiatra. Aquí puedes ver tus pacientes vinculados y gestionar las solicitudes de nuevos pacientes.</p>
+                        </div>
                     </div>
                 </div>
             @endif

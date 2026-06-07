@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Paciente\ChatController;
 use App\Http\Controllers\Paciente\DiarioController;
+use App\Http\Controllers\Paciente\PatientDoctorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ForoController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfessionalCredentialController;
 use App\Http\Controllers\Admin\CredentialApprovalController;
+use App\Http\Controllers\Doctor\DoctorPatientController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -76,6 +78,12 @@ Route::middleware(['auth', 'verified', 'professional_verified'])->group(function
         Route::delete('/comentarios/{comentario}', [ForoController::class, 'destroyComentario'])->name('comentarios.destroy');
     });
 
+    // Rutas para gestión doctor-paciente
+    Route::prefix('doctor')->name('doctor.')->group(function () {
+        Route::post('/solicitudes/{doctorPatient}/accept', [DoctorPatientController::class, 'accept'])->name('solicitudes.accept');
+        Route::post('/solicitudes/{doctorPatient}/reject', [DoctorPatientController::class, 'reject'])->name('solicitudes.reject');
+    });
+
     Route::middleware('auth')->prefix('diarios')->name('diarios.')->group(function () {
         Route::get('/', [DiarioController::class, 'index'])->name('index');
         Route::get('/crear', [DiarioController::class, 'create'])->name('create');
@@ -89,6 +97,14 @@ Route::middleware(['auth', 'verified', 'professional_verified'])->group(function
         Route::get('/{chat}', [ChatController::class, 'show'])->name('show');
         Route::patch('/{chat}/accept', [ChatController::class, 'accept'])->name('accept');
         Route::patch('/{chat}/reject', [ChatController::class, 'reject'])->name('reject');
+    });
+
+    // Rutas para gestión paciente-doctor
+    Route::prefix('doctores')->name('doctores.')->group(function () {
+        Route::get('/', [PatientDoctorController::class, 'index'])->name('index');
+        Route::post('/{doctor}', [PatientDoctorController::class, 'store'])->name('store');
+        Route::get('/mis-doctores', [PatientDoctorController::class, 'myDoctors'])->name('mis-doctores');
+        Route::delete('/{doctorPatient}', [PatientDoctorController::class, 'cancelRequest'])->name('cancel');
     });
 });
 

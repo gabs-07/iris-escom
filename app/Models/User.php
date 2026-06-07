@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'rol', 'is_verified_professional'])]
+#[Fillable(['name', 'apellidos', 'email', 'password', 'rol', 'is_verified_professional', 'fecha_nacimiento', 'genero', 'telefono', 'emergencia_nombre', 'emergencia_relacion', 'emergencia_telefono'])]
 #[Hidden(['password', 'remember_token'])]
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -67,5 +67,31 @@ class User extends Authenticatable implements MustVerifyEmail
     public function professionalCredential(): HasOne
     {
         return $this->hasOne(ProfessionalCredential::class);
+    }
+
+    // Relaciones para doctores (psicólogos/psiquiatras)
+    public function patients(): HasMany
+    {
+        return $this->hasMany(DoctorPatient::class, 'doctor_id')
+            ->where('status', 'accepted');
+    }
+
+    public function pendingPatientRequests(): HasMany
+    {
+        return $this->hasMany(DoctorPatient::class, 'doctor_id')
+            ->where('status', 'pending');
+    }
+
+    // Relaciones para pacientes
+    public function doctors(): HasMany
+    {
+        return $this->hasMany(DoctorPatient::class, 'patient_id')
+            ->where('status', 'accepted');
+    }
+
+    public function pendingDoctorRequests(): HasMany
+    {
+        return $this->hasMany(DoctorPatient::class, 'patient_id')
+            ->where('status', 'pending');
     }
 }

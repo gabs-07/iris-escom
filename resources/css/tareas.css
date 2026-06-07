@@ -1,0 +1,263 @@
+/* =========================================
+   TAREAS.CSS - Diseño Premium y Compacto
+   ========================================= */
+
+/* ... (Mantén tu CSS de la barra de progreso aquí) ... */
+
+/* --- Grid y Tarjeta Compacta --- */
+.tasks-grid-premium {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Gap reducido para mayor compacidad */
+    margin-top: 1rem;
+}
+
+.task-card-premium.compact {
+    background-color: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 1.2rem; /* Padding reducido (antes 1.5rem) */
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem; /* Separación reducida entre columnas */
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(78, 121, 107, 0.04);
+    border: 1px solid var(--bg-surface);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.task-card-premium.compact::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px; /* Borde de color más fino */
+    transition: var(--transition);
+}
+
+.border-green::before { background-color: var(--primary); }
+.border-orange::before { background-color: #f5a623; }
+
+.task-card-premium.compact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 178, 160, 0.1);
+}
+
+/* --- Íconos Reducidos --- */
+.task-icon-wrapper {
+    width: 50px; /* Reducido de 65px */
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem; /* Reducido de 1.8rem */
+    background-color: var(--bg-main);
+}
+
+.write { background-color: rgba(102, 178, 160, 0.15); }
+.art { background-color: rgba(245, 166, 35, 0.15); }
+
+/* --- Contenido Compacto --- */
+.task-content-premium {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem; /* Menor espacio entre textos */
+}
+
+.task-badge {
+    align-self: flex-start;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.badge-green { background-color: rgba(102, 178, 160, 0.1); color: var(--primary); }
+.badge-orange { background-color: rgba(245, 166, 35, 0.1); color: #d68b1c; }
+
+.task-content-premium h3 {
+    font-size: 1.1rem; /* Título un poco más pequeño */
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.task-content-premium p {
+    font-size: 0.85rem; /* Texto más compacto */
+    color: var(--text-dark);
+    opacity: 0.8;
+    line-height: 1.4;
+    margin: 0;
+    max-width: 600px;
+}
+
+.task-author {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0.2rem;
+}
+
+.avatar-tiny {
+    width: 18px; height: 18px;
+    background-color: var(--accent); color: var(--text-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.55rem; border-radius: 50%;
+}
+.task-author span { font-size: 0.75rem; color: var(--text-dark); opacity: 0.7; }
+
+/* --- NUEVO: Panel Lateral de Acciones (Selección y Evidencia) --- */
+.task-card-body {
+    display: contents;
+}
+
+.task-action-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--bg-surface);
+    min-width: 280px;
+}
+
+.task-select-btn {
+    border: 1px solid rgba(61, 155, 122, 0.2);
+    background-color: #f8fbf9;
+    color: var(--text-dark);
+    border-radius: var(--radius-md);
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.task-select-btn:hover,
+.task-card-premium.selected .task-select-btn {
+    background-color: rgba(61, 155, 122, 0.12);
+    border-color: rgba(61, 155, 122, 0.35);
+}
+
+.task-card-premium.selected {
+    border-color: rgba(61, 155, 122, 0.35);
+    box-shadow: 0 12px 28px rgba(61, 155, 122, 0.12);
+}
+
+.select-icon {
+    font-size: 1.1rem;
+}
+
+.task-evidence-panel {
+    display: none;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.task-card-premium.selected .task-evidence-panel {
+    display: flex;
+}
+
+.evidence-hint {
+    color: var(--text-body);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.evidence-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.field-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.file-input {
+    width: 100%;
+    padding: 0.8rem 0.85rem;
+    border: 1px dashed rgba(61, 155, 122, 0.35);
+    border-radius: var(--radius-md);
+    background-color: #fafcf9;
+    color: var(--text-body);
+}
+
+.or-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.or-divider::before,
+.or-divider::after {
+    content: '';
+    height: 1px;
+    flex: 1;
+    background: rgba(61, 155, 122, 0.15);
+}
+
+.evidence-textarea {
+    width: 100%;
+    border: 1px solid rgba(61, 155, 122, 0.22);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    background-color: #ffffff;
+    color: var(--text-dark);
+    resize: vertical;
+    min-height: 110px;
+    font-family: var(--font-body);
+}
+
+.evidence-textarea:focus,
+.file-input:focus {
+    outline: 2px solid rgba(61, 155, 122, 0.2);
+    border-color: rgba(61, 155, 122, 0.45);
+}
+
+.evidence-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.meta-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background-color: rgba(61, 155, 122, 0.1);
+    color: var(--primary-dark);
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.btn-sm {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    width: 100%;
+    justify-content: center;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+    .task-card-premium.compact {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .task-icon-wrapper { margin: 0 auto; }
+    .task-content-premium { text-align: center; align-items: center; }
+
+    .task-action-panel {
+        border-left: none;
+        border-top: 1px solid var(--bg-surface);
+        padding-left: 0;
+        padding-top: 1rem;
+        min-width: 0;
+    }
+}
